@@ -1,19 +1,11 @@
 import 'reflect-metadata';
 import express from 'express';
 import './database';
+import { router } from './routes';
 
 const app = express();
 app.use(express.json());
-/**
- * GET
- * POST
- * PUT
- * DELETE
- * PATCH
- */
 
-app.get('/', (request, response) => {
-  return response.json({ message: 'Hello World - NLW04' });
-});
+app.use(router);
 
 app.listen(3333, () => console.log('Server is running!'));
