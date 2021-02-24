@@ -2,7 +2,7 @@
 
 ## 1 - testes unitários:
 
-### São exemplos: testar um service e testar uma função especifica
+### São exemplos: testar um service ou testar uma função especifica
 
 ## 2 - testes de integração:
 
