@@ -1,3 +1,4 @@
+import { getConnection } from 'typeorm';
 import request from 'supertest';
 import { app } from '../app';
 
@@ -7,6 +8,15 @@ describe('Users', () => {
   beforeAll(async () => {
     const connection = await createConnection();
     await connection.runMigrations();
+  });
+  beforeEach(async () => {
+    const connection = getConnection();
+    const entities = connection.entityMetadatas;
+
+    entities.forEach(async (entity) => {
+      const repository = connection.getRepository(entity.name);
+      await repository.query(`DELETE FROM ${entity.tableName}`);
+    });
   });
 
   it('Should be able to create a new user', async () => {
@@ -19,6 +29,11 @@ describe('Users', () => {
   });
 
   it('Should not be able to create a user with exists email', async () => {
+    await request(app).post('/users').send({
+      email: 'user@exemple.com',
+      name: 'User Example',
+    });
+
     const response = await request(app).post('/users').send({
       email: 'user@exemple.com',
       name: 'User Example',

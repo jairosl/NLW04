@@ -20,7 +20,7 @@ class SurveysController {
 
     const allSurveys = await surveysRespository.find();
 
-    response.json({ allSurveys });
+    response.json(allSurveys);
   }
 }
 

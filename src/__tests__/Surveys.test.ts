@@ -1,3 +1,4 @@
+import { getConnection } from 'typeorm';
 import request from 'supertest';
 import { app } from '../app';
 
@@ -7,6 +8,15 @@ describe('Surveys', () => {
   beforeAll(async () => {
     const connection = await createConnection();
     await connection.runMigrations();
+  });
+  beforeEach(async () => {
+    const connection = getConnection();
+    const entities = connection.entityMetadatas;
+
+    entities.forEach(async (entity) => {
+      const repository = connection.getRepository(entity.name);
+      await repository.query(`DELETE FROM ${entity.tableName}`);
+    });
   });
 
   it('Should be able to create a new survey', async () => {
@@ -27,6 +37,6 @@ describe('Surveys', () => {
 
     const response = await request(app).get('/surveys');
 
-    expect(response.body.length).toBe(2);
+    expect(response.body.length).toBe(1);
   });
 });
