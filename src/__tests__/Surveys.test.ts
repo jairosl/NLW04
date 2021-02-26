@@ -18,6 +18,11 @@ describe('Surveys', () => {
       await repository.query(`DELETE FROM ${entity.tableName}`);
     });
   });
+  afterAll(async () => {
+    const connection = getConnection();
+    await connection.dropDatabase();
+    connection.close();
+  });
 
   it('Should be able to create a new survey', async () => {
     const response = await request(app).post('/surveys').send({
