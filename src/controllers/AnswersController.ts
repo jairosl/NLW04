@@ -7,8 +7,6 @@ class AnswersController {
     const { value } = request.params;
     const { id } = request.query;
 
-    console.log(value, id);
-
     const surveyUsersRepository = getCustomRepository(SurveyUserRepository);
 
     const surveyUser = await surveyUsersRepository.findOne({
@@ -19,6 +17,10 @@ class AnswersController {
       return response
         .status(400)
         .json({ error: 'SurveyUser does not exists!' });
+    }
+
+    if (surveyUser.value !== null) {
+      return response.json(surveyUser);
     }
 
     surveyUser.value = Number(value);
